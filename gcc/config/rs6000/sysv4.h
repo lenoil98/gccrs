@@ -39,9 +39,9 @@
 
 /* Override rs6000.h definition.  */
 #undef	ASM_DEFAULT_SPEC
-#define	ASM_DEFAULT_SPEC "-mppc"
+#define	ASM_DEFAULT_SPEC "-mppc%{m64:64}"
 
-#define	TARGET_TOC		(TARGET_64BIT				\
+#define	TARGET_HAS_TOC		(TARGET_64BIT				\
 				 || (TARGET_MINIMAL_TOC			\
 				     && flag_pic > 1)			\
 				 || DEFAULT_ABI != ABI_V4)
@@ -50,7 +50,6 @@
 #define	TARGET_BIG_ENDIAN	(! TARGET_LITTLE_ENDIAN)
 #define	TARGET_PROTOTYPE	target_prototype
 #define	TARGET_NO_PROTOTYPE	(! TARGET_PROTOTYPE)
-#define	TARGET_NO_TOC		(! TARGET_TOC)
 #define	TARGET_NO_EABI		(! TARGET_EABI)
 #define	TARGET_REGNAMES		rs6000_regnames
 
@@ -548,6 +547,19 @@ extern int fixuplabelno;
     }						\
   while (0)
 #endif
+
+#ifdef TARGET_RUST_OS_INFO
+# error "TARGET_RUST_OS_INFO already defined in sysv4.h (rs6000) - c++ undefines it and redefines it."
+#endif
+#define TARGET_RUST_OS_INFO()		\
+  do {						\
+    /*TODO: everything in here is just guessed from gcc triples and assumptions - nothing really*/ \
+    /*targets system v anymore so hard to find info on it. as such, everything subject to change*/ \
+    builtin_rust_info ("target_family", "unix");			\
+    builtin_rust_info ("target_os", "sysv4");			\
+    builtin_rust_info ("target_vendor", "unknown");			\
+    builtin_rust_info ("target_env", "");			\
+  } while (0)
 
 /* Select one of BIG_OPT, LITTLE_OPT or DEFAULT_OPT depending
    on various -mbig, -mlittle and -mcall- options.  */

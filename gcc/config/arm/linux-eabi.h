@@ -33,6 +33,14 @@
 #define EXTRA_TARGET_D_OS_VERSIONS()		\
   ANDROID_TARGET_D_OS_VERSIONS();
 
+#define EXTRA_TARGET_RUST_OS_INFO()		\
+  do { 						\
+    BPABI_TARGET_RUST_OS_INFO();		\
+    GNU_USER_TARGET_RUST_OS_INFO();		\
+    ANDROID_TARGET_RUST_OS_INFO();		\
+    /*TODO: ensure that this makes target_os 'linux' properly and stuff*/ \
+  while (0)
+
 /* We default to a soft-float ABI so that binaries can run on all
    target hardware.  If you override this to use the hard-float ABI then
    change the setting of GLIBC_DYNAMIC_LINKER_DEFAULT as well.  */
@@ -89,7 +97,7 @@
 #define MUSL_DYNAMIC_LINKER_E "%{mbig-endian:eb}"
 #endif
 #define MUSL_DYNAMIC_LINKER \
-  "/lib/ld-musl-arm" MUSL_DYNAMIC_LINKER_E "%{mfloat-abi=hard:hf}.so.1"
+  "/lib/ld-musl-arm" MUSL_DYNAMIC_LINKER_E "%{mfloat-abi=hard:hf}%{mfdpic:-fdpic}.so.1"
 
 /* At this point, bpabi.h will have clobbered LINK_SPEC.  We want to
    use the GNU/Linux version, not the generic BPABI version.  */
@@ -101,9 +109,12 @@
 #undef  ASAN_CC1_SPEC
 #define ASAN_CC1_SPEC "%{%:sanitize(address):-funwind-tables}"
 
+#define FDPIC_CC1_SPEC ""
+
 #undef  CC1_SPEC
 #define CC1_SPEC							\
-  LINUX_OR_ANDROID_CC (GNU_USER_TARGET_CC1_SPEC " " ASAN_CC1_SPEC,	\
+  LINUX_OR_ANDROID_CC (GNU_USER_TARGET_CC1_SPEC " " ASAN_CC1_SPEC " "	\
+		       FDPIC_CC1_SPEC,					\
 		       GNU_USER_TARGET_CC1_SPEC " " ASAN_CC1_SPEC " "	\
 		       ANDROID_CC1_SPEC)
 

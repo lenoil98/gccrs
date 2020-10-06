@@ -27,6 +27,14 @@ along with GCC; see the file COPYING3.  If not see
     }						\
   while (0)
 
+#ifdef TARGET_RUST_OS_INFO
+# error "TARGET_RUST_OS_INFO already defined in pa-linux.h (pa) - c++ undefines it and redefines it."
+#endif
+#define TARGET_RUST_OS_INFO()			\
+  do {							\
+    GNU_USER_TARGET_RUST_OS_INFO();	\
+  } while (0)
+
 #undef CPP_SPEC
 #define CPP_SPEC "%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT}"
 
@@ -101,7 +109,7 @@ along with GCC; see the file COPYING3.  If not see
 
 /* FIXME: Hacked from the <elfos.h> one so that we avoid multiple
    labels in a function declaration (since pa.c seems determined to do
-   it differently)  */
+   it differently).  */
 
 #undef ASM_DECLARE_FUNCTION_NAME
 #define ASM_DECLARE_FUNCTION_NAME(FILE, NAME, DECL)		\
@@ -109,8 +117,13 @@ along with GCC; see the file COPYING3.  If not see
     {								\
       ASM_OUTPUT_TYPE_DIRECTIVE (FILE, NAME, "function");	\
       ASM_DECLARE_RESULT (FILE, DECL_RESULT (DECL));		\
+      pa_output_function_label (FILE);				\
     }								\
   while (0)
+
+/* Output function prologue for linux.  */
+#undef TARGET_ASM_FUNCTION_PROLOGUE
+#define TARGET_ASM_FUNCTION_PROLOGUE pa_linux_output_function_prologue
 
 /* As well as globalizing the label, we need to encode the label
    to ensure a plabel is generated in an indirect call.  */

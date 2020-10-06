@@ -92,6 +92,8 @@ extern enum pipeline_type microblaze_pipe;
 /* Names to predefine in the preprocessor for this target machine.  */
 #define TARGET_CPU_CPP_BUILTINS() microblaze_cpp_define (pfile)
 
+#define TARGET_RUST_CPU_INFO microblaze_rust_target_cpu_info
+
 /* Assembler specs.  */
 
 #define TARGET_ASM_SPEC ""
@@ -695,7 +697,7 @@ do {									\
   fprintf (STREAM, "\t.align\t%d\n", (LOG))
 
 #define ASM_OUTPUT_SKIP(STREAM,SIZE)					\
-  fprintf (STREAM, "\t.space\t%lu\n", (SIZE))
+  fprintf (STREAM, "\t.space\t" HOST_WIDE_INT_PRINT_UNSIGNED "\n", (SIZE))
 
 #define ASCII_DATA_ASM_OP		"\t.ascii\t"
 #define STRING_ASM_OP			"\t.asciz\t"

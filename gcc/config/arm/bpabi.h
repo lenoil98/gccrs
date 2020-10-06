@@ -55,6 +55,8 @@
 #define TARGET_FIX_V4BX_SPEC " %{mcpu=arm8|mcpu=arm810|mcpu=strongarm*"\
   "|march=armv4|mcpu=fa526|mcpu=fa626:--fix-v4bx}"
 
+#define TARGET_FDPIC_ASM_SPEC ""
+
 #define BE8_LINK_SPEC							\
   "%{!r:%{!mbe32:%:be8_linkopt(%{mlittle-endian:little}"		\
   "			       %{mbig-endian:big}"			\
@@ -64,7 +66,8 @@
 /* Tell the assembler to build BPABI binaries.  */
 #undef  SUBTARGET_EXTRA_ASM_SPEC
 #define SUBTARGET_EXTRA_ASM_SPEC \
-  "%{mabi=apcs-gnu|mabi=atpcs:-meabi=gnu;:-meabi=5}" TARGET_FIX_V4BX_SPEC
+  "%{mabi=apcs-gnu|mabi=atpcs:-meabi=gnu;:-meabi=5}" TARGET_FIX_V4BX_SPEC \
+  TARGET_FDPIC_ASM_SPEC
 
 #ifndef SUBTARGET_EXTRA_LINK_SPEC
 #define SUBTARGET_EXTRA_LINK_SPEC ""
@@ -100,6 +103,17 @@
 #undef TARGET_OS_CPP_BUILTINS
 #define TARGET_OS_CPP_BUILTINS() \
   TARGET_BPABI_CPP_BUILTINS()
+
+#define BPABI_TARGET_RUST_OS_INFO() \
+  do { \
+    /*TODO: is this even an OS? What should go here?*/ \
+  } while (0)
+
+#ifdef TARGET_RUST_OS_INFO
+# error "TARGET_RUST_OS_INFO already defined in bpabi.h - c++ undefines it and redefines it."
+#endif
+#define TARGET_RUST_OS_INFO() \
+  BPABI_TARGET_RUST_OS_INFO()
 
 /* The BPABI specifies the use of .{init,fini}_array.  Therefore, we
    do not want GCC to put anything into the .{init,fini} sections.  */

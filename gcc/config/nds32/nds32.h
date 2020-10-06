@@ -226,7 +226,7 @@ enum nds32_16bit_address_type
    As long as the register satisfies both criteria above,
    it is required to be saved.  */
 #define NDS32_REQUIRED_CALLEE_SAVED_P(regno)                  \
-  ((!call_used_regs[regno]) && (df_regs_ever_live_p (regno)))
+  (!call_used_or_fixed_reg_p (regno) && df_regs_ever_live_p (regno))
 
 /* This macro is to check if the push25/pop25 are available to be used
    for code generation.  Because pop25 also performs return behavior,
@@ -1005,6 +1005,9 @@ enum nds32_builtins
 
 #define TARGET_CPU_CPP_BUILTINS() \
   nds32_cpu_cpp_builtins (pfile)
+
+/* Target CPU info for Rust.  */
+#define TARGET_RUST_CPU_INFO nds32_rust_target_cpu_info
 
 
 /* Defining Data Structures for Per-function Information.  */

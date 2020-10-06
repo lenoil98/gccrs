@@ -75,6 +75,8 @@
     }                                           \
   while (0)
 
+#define TARGET_RUST_CPU_INFO rx_rust_target_cpu_info
+
 #undef  CC1_SPEC
 #define CC1_SPEC "\
   %{mas100-syntax:%{gdwarf*:%e-mas100-syntax is incompatible with -gdwarf}} \
@@ -408,7 +410,9 @@ typedef unsigned int CUMULATIVE_ARGS;
 #define GLOBAL_ASM_OP 		\
   (TARGET_AS100_SYNTAX ? "\t.GLB\t" : "\t.global\t")
 #define ASM_COMMENT_START	" ;"
+#undef ASM_APP_ON
 #define ASM_APP_ON		""
+#undef ASM_APP_OFF
 #define ASM_APP_OFF 		""
 #define LOCAL_LABEL_PREFIX	"L"
 #undef  USER_LABEL_PREFIX

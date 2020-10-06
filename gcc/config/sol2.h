@@ -124,6 +124,16 @@ along with GCC; see the file COPYING3.  If not see
     solaris_override_options ();			\
   } while (0)
 
+#define EXTRA_TARGET_RUST_OS_INFO()
+#define TARGET_RUST_OS_INFO()			\
+  do {			\
+    builtin_rust_info ("target_family", "unix");			\
+    builtin_rust_info ("target_os", "solaris");			\
+    builtin_rust_info ("target_vendor", "sun");			\
+    builtin_rust_info ("target_env", "");			\
+    EXTRA_TARGET_RUST_OS_INFO();			\
+  } while (0)
+
 #if DEFAULT_ARCH32_P
 #define MULTILIB_DEFAULTS { "m32" }
 #else
@@ -260,9 +270,9 @@ along with GCC; see the file COPYING3.  If not see
 
 /* Error out on -fsanitize=thread|leak.  */
 #define LIBTSAN_EARLY_SPEC "\
-  %e:-fsanitize=thread is not supported in this configuration"
+  %e-fsanitize=thread is not supported in this configuration"
 #define LIBLSAN_EARLY_SPEC "\
-  %e:-fsanitize=leak is not supported in this configuration"
+  %e-fsanitize=leak is not supported in this configuration"
 
 /* We don't use the standard svr4 STARTFILE_SPEC because it's wrong for us.  */
 #undef STARTFILE_SPEC

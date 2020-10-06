@@ -94,6 +94,9 @@ along with GCC; see the file COPYING3.  If not see
   while (0)
 #endif
 
+/* Target CPU info for Rust.  */
+#define TARGET_RUST_CPU_INFO alpha_rust_target_cpu_info
+
 /* Run-time compilation parameters selecting different hardware subsets.  */
 
 /* Which processor to schedule for. The cpu attribute defines a list that
@@ -759,7 +762,7 @@ do {									     \
 #define MOVE_MAX 8
 
 /* If a memory-to-memory move would take MOVE_RATIO or more simple
-   move-instruction pairs, we will do a movmem or libcall instead.
+   move-instruction pairs, we will do a cpymem or libcall instead.
 
    Without byte/word accesses, we want no more than four instructions;
    with, several single byte accesses are better.  */

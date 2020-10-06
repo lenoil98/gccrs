@@ -1,5 +1,5 @@
 // rust-system.h -- Rust frontend inclusion of gcc header files   -*- C++ -*-
-// Copyright (C) 2009-2019 Free Software Foundation, Inc.
+// Copyright (C) 2009-2020 Free Software Foundation, Inc.
 
 // This file is part of GCC.
 
@@ -37,112 +37,37 @@
 #include <set>
 #include <vector>
 #include <sstream>
+#include <string>
+#include <deque>
+#include <functional>
 
-#if defined(HAVE_UNORDERED_MAP)
+// Rust frontend requires C++11 minimum, so will have unordered_map and set
+#include <unordered_map>
+#include <unordered_set>
 
-# include <unordered_map>
-# include <unordered_set>
-
-# define Unordered_map(KEYTYPE, VALTYPE) \
-	std::unordered_map<KEYTYPE, VALTYPE>
-
-# define Unordered_map_hash(KEYTYPE, VALTYPE, HASHFN, EQFN) \
-	std::unordered_map<KEYTYPE, VALTYPE, HASHFN, EQFN>
-
-# define Unordered_set(KEYTYPE) \
-	std::unordered_set<KEYTYPE>
-
-# define Unordered_set_hash(KEYTYPE, HASHFN, EQFN) \
-	std::unordered_set<KEYTYPE, HASHFN, EQFN>
-
-#elif defined(HAVE_TR1_UNORDERED_MAP)
-
-# include <tr1/unordered_map>
-# include <tr1/unordered_set>
-
-# define Unordered_map(KEYTYPE, VALTYPE) \
-	std::tr1::unordered_map<KEYTYPE, VALTYPE>
-
-# define Unordered_map_hash(KEYTYPE, VALTYPE, HASHFN, EQFN) \
-	std::tr1::unordered_map<KEYTYPE, VALTYPE, HASHFN, EQFN>
-
-# define Unordered_set(KEYTYPE) \
-	std::tr1::unordered_set<KEYTYPE>
-
-# define Unordered_set_hash(KEYTYPE, HASHFN, EQFN) \
-	std::tr1::unordered_set<KEYTYPE, HASHFN, EQFN>
-
-#elif defined(HAVE_EXT_HASH_MAP)
-
-# include <ext/hash_map>
-# include <ext/hash_set>
-
-# define Unordered_map(KEYTYPE, VALTYPE) \
-	__gnu_cxx::hash_map<KEYTYPE, VALTYPE>
-
-# define Unordered_map_hash(KEYTYPE, VALTYPE, HASHFN, EQFN) \
-	__gnu_cxx::hash_map<KEYTYPE, VALTYPE, HASHFN, EQFN>
-
-# define Unordered_set(KEYTYPE) \
-	__gnu_cxx::hash_set<KEYTYPE>
-
-# define Unordered_set_hash(KEYTYPE, HASHFN, EQFN) \
-	__gnu_cxx::hash_set<KEYTYPE, HASHFN, EQFN>
-
-// Provide hash functions for strings and pointers.
-
-namespace __gnu_cxx
-{
-
-template<>
-struct hash<std::string>
-{
-  size_t
-  operator()(std::string s) const
-  { return __stl_hash_string(s.c_str()); }
-};
-
-template<typename T>
-struct hash<T*>
-{
-  size_t
-  operator()(T* p) const
-  { return reinterpret_cast<size_t>(p); }
-};
-
-}
-
-#else
-
-# define Unordered_map(KEYTYPE, VALTYPE) \
-	std::map<KEYTYPE, VALTYPE>
-
-# define Unordered_set(KEYTYPE) \
-	std::set<KEYTYPE>
-
-// We could make this work by writing an adapter class which
-// implemented operator< in terms of the hash function.
-# error "requires hash table type"
-
-#endif
-
-// We don't really need iostream, but some versions of gmp.h include
-// it when compiled with C++, which means that we need to include it
-// before the macro magic of safe-ctype.h, which is included by
-// system.h.
+/* We don't really need iostream, but some versions of gmp.h include
+ * it when compiled with C++, which means that we need to include it
+ * before the macro magic of safe-ctype.h, which is included by
+ * system.h. */
 #include <iostream>
 
 #include "system.h"
 #include "ansidecl.h"
 #include "coretypes.h"
 
-#include "diagnostic-core.h"	/* For error_at and friends.  */
-#include "intl.h"		/* For _().  */
+#include "diagnostic-core.h" /* For error_at and friends.  */
+#include "intl.h"	    /* For _().  */
 
 // When using gcc, rust_assert is just gcc_assert.
-#define rust_assert(EXPR) gcc_assert(EXPR)
+#define rust_assert(EXPR) gcc_assert (EXPR)
 
 // When using gcc, rust_unreachable is just gcc_unreachable.
-#define rust_unreachable() gcc_unreachable()
+#define rust_unreachable() gcc_unreachable ()
+
+extern void
+rust_preserve_from_gc (tree t);
+
+extern const char *
+rust_localize_identifier (const char *ident);
 
 #endif // !defined(RUST_SYSTEM_H)

@@ -72,6 +72,19 @@
     }							\
   while (0)
 
+#ifdef TARGET_RUST_OS_INFO
+# error "TARGET_RUST_OS_INFO already defined in rtems.h (rs6000) - c++ undefines it and redefines it."
+#endif
+#define TARGET_RUST_OS_INFO()		\
+  do {						\
+    /*note: as far as I know, rustc has no supported for rtems, so this is just guessed*/ \
+    /*everything is subject to change, especially target_env and target_family*/ \
+    builtin_rust_info ("target_family", "unix");			\
+    builtin_rust_info ("target_os", "rtems");			\
+    builtin_rust_info ("target_vendor", "unknown");			\
+    builtin_rust_info ("target_env", "");			\
+  } while (0)
+
 /* Copy and paste from linux64.h and freebsd64.h */
 #undef RELOCATABLE_NEEDS_FIXUP
 #define RELOCATABLE_NEEDS_FIXUP \
@@ -253,9 +266,6 @@
 %{mcpu=860:  %{!Dppc*: %{!Dmpc*: -Dmpc860}  } } \
 %{mcpu=8540: %{!Dppc*: %{!Dmpc*: -Dppc8540}  } } \
 %{mcpu=e6500: -D__PPC_CPU_E6500__}"
-
-#undef	ASM_DEFAULT_SPEC
-#define	ASM_DEFAULT_SPEC "-mppc%{m64:64}"
 
 #undef	ASM_SPEC
 #define	ASM_SPEC "%{!m64:%(asm_spec32)}%{m64:%(asm_spec64)} %(asm_spec_common)"

@@ -21,9 +21,8 @@ extern int alpha_next_sequence_number;
 
 extern void literal_section (void);
 extern int zap_mask (HOST_WIDE_INT);
-extern int direct_return (void);
+extern bool direct_return (void);
 
-extern int alpha_sa_size (void);
 extern HOST_WIDE_INT alpha_initial_elimination_offset (unsigned int,
 						       unsigned int);
 extern void alpha_expand_prologue (void);
@@ -112,6 +111,9 @@ extern rtx unicosmk_add_call_info_word (rtx);
 extern bool some_small_symbolic_operand_int (rtx);
 extern int tls_symbolic_operand_1 (rtx, int, int);
 extern rtx resolve_reload_operand (rtx);
+
+/* Declare functions in alpha-rust.c  */
+extern void alpha_rust_target_cpu_info (void);
 
 namespace gcc { class context; }
 class rtl_opt_pass;

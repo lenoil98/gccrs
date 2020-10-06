@@ -58,6 +58,26 @@
     }						\
   while (0)
 
+#define TARGET_RUST_CPU_INFO() \
+  do { \
+    rust_add_target_info("target_arch", "mn10300"); \
+    if (TARGET_AM33) \
+      rust_add_target_info("target_feature", "am33"); \
+    else if (TARGET_AM33_2) \
+      rust_add_target_info("target_feature", "am33-2"); \
+    else if (TARGET_AM34) \
+      rust_add_target_info("target_feature", "am34"); \
+    if (TARGET_MULT_BUG) \
+      rust_add_target_info("target_feature", "mult-bug"); \
+    if (TARGET_PTR_A0D0) \
+      rust_add_target_info("target_feature", "return-pointer-on-d0"); \
+    if (TARGET_ALLOW_LIW) \
+      rust_add_target_info("target_feature", "liw"); \
+    if (TARGET_ALLOW_SETLB) \
+      rust_add_target_info("target_feature", "setlb"); \
+    /*TODO: find way of getting no-crt0 and relax info?*/ \
+  } while (0)
+
 #ifndef MN10300_OPTS_H
 #include "config/mn10300/mn10300-opts.h"
 #endif
@@ -197,7 +217,7 @@ extern enum processor_type mn10300_tune_cpu;
    Aside from that, you can include as many other registers as you
    like.  */
 
-#define CALL_USED_REGISTERS \
+#define CALL_REALLY_USED_REGISTERS \
   { 1, 1, 0, 0,				/* data regs */		\
     1, 1, 0, 0,				/* addr regs */		\
     1,					/* arg reg */		\
@@ -210,13 +230,6 @@ extern enum processor_type mn10300_tune_cpu;
     1,					/* mdr reg */		\
     1					/* cc reg */		\
   }
-
-/* Note: The definition of CALL_REALLY_USED_REGISTERS is not
-   redundant.  It is needed when compiling in PIC mode because
-   the a2 register becomes fixed (and hence must be marked as
-   call_used) but in order to preserve the ABI it is not marked
-   as call_really_used.  */
-#define CALL_REALLY_USED_REGISTERS CALL_USED_REGISTERS
 
 #define REG_ALLOC_ORDER \
   { 0, 1, 4, 5, 2, 3, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 8, 9 \

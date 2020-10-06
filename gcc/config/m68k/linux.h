@@ -60,6 +60,8 @@ along with GCC; see the file COPYING3.  If not see
 /* Target OS builtins.  */
 #define TARGET_OS_CPP_BUILTINS() GNU_USER_TARGET_OS_CPP_BUILTINS()
 
+#define TARGET_RUST_OS_INFO() GNU_USER_TARGET_RUST_OS_INFO()
+
 #undef CPP_SPEC
 #define CPP_SPEC "%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT}"
 
@@ -72,6 +74,9 @@ along with GCC; see the file COPYING3.  If not see
    done.  */
 
 #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+
+#undef MUSL_DYNAMIC_LINKER
+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-m68k.so.1"
 
 #undef LINK_SPEC
 #define LINK_SPEC "-m m68kelf %{shared} \

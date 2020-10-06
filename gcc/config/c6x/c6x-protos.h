@@ -21,6 +21,9 @@
 #ifndef GCC_C6X_PROTOS_H
 #define GCC_C6X_PROTOS_H
 
+/* Defined in c6x-rust.c  */
+extern void c6x_rust_target_cpu_info (void);
+
 /* Functions defined in c6x.c.  */
 
 #ifdef RTX_CODE
@@ -35,7 +38,7 @@ extern bool c6x_long_call_p (rtx);
 extern void c6x_expand_call (rtx, rtx, bool);
 extern rtx c6x_expand_compare (rtx, machine_mode);
 extern bool c6x_force_op_for_comparison_p (enum rtx_code, rtx);
-extern bool c6x_expand_movmem (rtx, rtx, rtx, rtx, rtx, rtx);
+extern bool c6x_expand_cpymem (rtx, rtx, rtx, rtx, rtx, rtx);
 
 extern rtx c6x_subword (rtx, bool);
 extern void split_di (rtx *, int, rtx *, rtx *);
@@ -53,6 +56,8 @@ extern void c6x_expand_epilogue (bool);
 extern rtx c6x_return_addr_rtx (int);
 
 extern void c6x_set_return_address (rtx, rtx);
+
+enum reg_class c6x_regno_reg_class (int);
 #endif
 
 extern void c6x_override_options (void);

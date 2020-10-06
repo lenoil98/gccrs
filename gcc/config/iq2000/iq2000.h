@@ -43,6 +43,19 @@
     }                                           \
   while (0)
 
+#define TARGET_RUST_CPU_INFO()   \
+  do {      \
+    rust_add_target_info("target_arch", "iq2000");  \
+    /*TODO: maybe make sub-arches features?*/ \
+    if (TARGET_EMBEDDED_DATA)   \
+      rust_add_target_info("target_feature", "embedded-data");   \
+    if (TARGET_GPOPT)   \
+      rust_add_target_info("target_feature", "gpopt");   \
+    /*TODO: figure out if can detect no-crt0 as feature*/ \
+    if (TARGET_UNINIT_CONST_IN_RODATA)   \
+      rust_add_target_info("target_feature", "uninit-const-in-rodata");   \
+  } while (0)
+
 /* Macros used in the machine description to test the flags.  */
 
 #define TARGET_STATS		0
@@ -687,7 +700,7 @@ enum delay_type
 /* Tell prologue and epilogue if register REGNO should be saved / restored.  */
 
 #define MUST_SAVE_REGISTER(regno) \
-  ((df_regs_ever_live_p (regno) && !call_used_regs[regno])		\
+  ((df_regs_ever_live_p (regno) && !call_used_or_fixed_reg_p (regno))	\
   || (regno == HARD_FRAME_POINTER_REGNUM && frame_pointer_needed)	\
    || (regno == (GP_REG_FIRST + 31) && df_regs_ever_live_p (GP_REG_FIRST + 31)))
 

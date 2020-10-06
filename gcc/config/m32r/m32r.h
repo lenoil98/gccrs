@@ -96,6 +96,8 @@
     }						\
   while (0)
 
+#define TARGET_RUST_CPU_INFO m32r_rust_target_cpu_info
+
 /* This macro defines names of additional specifications to put in the specs
    that can be used in various specifications like CC1_SPEC.  Its definition
    is an initializer with a subgrouping for each command option.
@@ -348,15 +350,13 @@
 #define SUBTARGET_CALL_USED_REGISTERS
 #endif
 
-#define CALL_USED_REGISTERS	\
+#define CALL_REALLY_USED_REGISTERS \
 {				\
   1, 1, 1, 1, 1, 1, 1, 1,	\
   0, 0, 0, 0, 0, 0, 1, 1,	\
   1, 1, 1			\
   SUBTARGET_CALL_USED_REGISTERS	\
 }
-
-#define CALL_REALLY_USED_REGISTERS CALL_USED_REGISTERS
 
 /* If defined, an initializer for a vector of integers, containing the
    numbers of hard registers in the order in which GCC should

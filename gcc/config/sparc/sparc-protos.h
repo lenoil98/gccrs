@@ -69,6 +69,7 @@ extern void sparc_split_reg_mem (rtx, rtx, machine_mode);
 extern void sparc_split_mem_reg (rtx, rtx, machine_mode);
 extern int sparc_split_reg_reg_legitimate (rtx, rtx);
 extern void sparc_split_reg_reg (rtx, rtx, machine_mode);
+extern const char *output_load_pcrel_sym (rtx *);
 extern const char *output_ubranch (rtx, rtx_insn *);
 extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
 extern const char *output_return (rtx_insn *);
@@ -113,5 +114,8 @@ extern rtl_opt_pass *make_pass_work_around_errata (gcc::context *);
 
 /* Routines implemented in sparc-d.c  */
 extern void sparc_d_target_versions (void);
+
+/* Routines implemented in sparc-rust.c  */
+extern void sparc_rust_target_cpu_info (void);
 
 #endif /* __SPARC_PROTOS_H__ */

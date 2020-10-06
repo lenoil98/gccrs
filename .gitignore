@@ -36,6 +36,8 @@ TAGS.sub
 .lvimrc
 
 .clang-format
+.clangd
+compile_commands.json
 
 .gdbinit
 .gdb_history
@@ -55,3 +57,9 @@ REVISION
 /mpc*
 /gmp*
 /isl*
+
+.vscode/*
+test.code-workspace
+
+gcc/rust/test3-tiny/*
+.clang-format.swap

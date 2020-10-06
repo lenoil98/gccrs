@@ -78,7 +78,7 @@ extern rtx nds32_di_low_part_subreg(rtx);
 
 extern rtx nds32_expand_load_multiple (int, int, rtx, rtx, bool, rtx *);
 extern rtx nds32_expand_store_multiple (int, int, rtx, rtx, bool, rtx *);
-extern bool nds32_expand_movmemsi (rtx, rtx, rtx, rtx);
+extern bool nds32_expand_cpymemsi (rtx, rtx, rtx, rtx);
 extern bool nds32_expand_setmem (rtx, rtx, rtx, rtx, rtx, rtx);
 extern bool nds32_expand_strlen (rtx, rtx, rtx, rtx);
 
@@ -256,6 +256,7 @@ extern const char *nds32_output_call (rtx, rtx *, rtx,
 				      const char *, const char *, bool);
 extern const char *nds32_output_tls_desc (rtx *);
 extern const char *nds32_output_tls_ie (rtx *);
+extern const char *nds32_output_symrel (rtx *);
 
 /* Auxiliary functions to output stack push/pop instruction.  */
 
@@ -318,6 +319,9 @@ extern int nds32_address_cost_impl (rtx, machine_mode, addr_space_t, bool);
 /* Auxiliary functions for pre-define marco.  */
 extern void nds32_cpu_cpp_builtins(struct cpp_reader *);
 
+/* Routines implemented in nds32-rust.c  */
+extern void nds32_rust_target_cpu_info (void);
+
 /* Auxiliary functions for const_vector's constraints.  */
 
 extern HOST_WIDE_INT const_vector_to_hwint (rtx);
@@ -368,5 +372,7 @@ extern bool nds32_use_load_post_increment(machine_mode);
 /* Functions for create nds32 specific optimization pass.  */
 extern rtl_opt_pass *make_pass_nds32_relax_opt (gcc::context *);
 extern rtl_opt_pass *make_pass_nds32_fp_as_gp (gcc::context *);
+
+extern int nds32_alloc_relax_group_id ();
 
 /* ------------------------------------------------------------------------ */
